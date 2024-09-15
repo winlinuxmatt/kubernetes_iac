@@ -1,34 +1,53 @@
 # kubernetes_iac
 Terraform Kubernetes IAC
-# This was built following the following and altered to suppot my cluster setup. I do plan to omprove this over time, but this is the first interation of this
-https://olav.ninja/talos-cluster-on-proxmox-with-terraform
-by Olav
 
-# I notice that there were a few thing needed after setting up the cluster and if anyone may want to see this it might help.
+This repository was built following the instructions provided in the following article and altered to support my cluster setup. I plan to improve this over time, but this is the first iteration.
 
-# To connect to your Talos Kubernetes cluster using the outputs from Terraform, you need to set up your local environment with the correct configuration files. Here's a step-by-step guide on how to use the kubeconfig and talosconfig outputs:
+Article: [Talos Cluster on Proxmox with Terraform](https://olav.ninja/talos-cluster-on-proxmox-with-terraform) by Olav
 
-# Save the kubeconfig and talosconfig Outputs to Files
+## Additional Steps
 
-# First, you need to capture the output from Terraform and save them into files on your local machine. Run the following commands:
+After setting up the cluster, there are a few additional steps that may be helpful to others.
+
+### Connect to the Talos Kubernetes Cluster
+
+To connect to your Talos Kubernetes cluster using the outputs from Terraform, you need to set up your local environment with the correct configuration files. Follow these steps:
+
+1. Save the `kubeconfig` and `talosconfig` outputs to files on your local machine. Run the following commands:
+
+	```bash
+	terraform output -raw kubeconfig > ~/.kube/config && terraform output -raw talosconfig > ~/.talos/config
+	```
+
+	Note: Adjust the file paths if necessary.
+
+2. Verify the file permissions for these files to avoid any security issues:
+
+	```bash
+	chmod 600 ~/.kube/config && chmod 600 ~/.talos/config
+	```
+
+### Set Up kubectl
+
+To interact with the Kubernetes cluster, you can use `kubectl`. Here's an example command to get the list of nodes:
 
 ```
 terraform output -raw kubeconfig > ~/.kube/config && terraform output -raw talosconfig > ~/.talos/config
 ```
 
-# This assumes you have ~/.kube/config and ~/.talos/config as the default locations for Kubernetes and Talos configurations. Adjust the file paths if necessary.
+### This assumes you have ~/.kube/config and ~/.talos/config as the default locations for Kubernetes and Talos configurations. Adjust the file paths if necessary.
 
-# Verify File Permissions
+### Verify File Permissions
 
-# Ensure the permissions for these files are set correctly to avoid any security issues:
+### Ensure the permissions for these files are set correctly to avoid any security issues:
 
 ```
 chmod 600 ~/.kube/config && chmod 600 ~/.talos/config
 ```
 
-# Set Up kubectl
+### Set Up kubectl
 
-# Get the list of nodes
+### Get the list of nodes
 
 ```
 kubectl get nodes
