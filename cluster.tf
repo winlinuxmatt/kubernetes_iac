@@ -1,3 +1,4 @@
+# This resource creates a new Talos machine secrets resource. 
 resource "talos_machine_secrets" "machine_secrets" {}
 
 # This data block retrieves the client configuration for the Talos cluster.
