@@ -35,19 +35,16 @@ To interact with the Kubernetes cluster, you can use `kubectl`. Here's an exampl
 terraform output -raw kubeconfig > ~/.kube/config && terraform output -raw talosconfig > ~/.talos/config
 ```
 
-### This assumes you have ~/.kube/config and ~/.talos/config as the default locations for Kubernetes and Talos configurations. Adjust the file paths if necessary.
-
-### Verify File Permissions
-
-### Ensure the permissions for these files are set correctly to avoid any security issues:
+This assumes you have ~/.kube/config and ~/.talos/config as the default locations for Kubernetes and Talos configurations. Adjust the file paths if necessary.
+Verify File Permissions
+Ensure the permissions for these files are set correctly to avoid any security issues:
 
 ```
 chmod 600 ~/.kube/config && chmod 600 ~/.talos/config
 ```
 
-### Set Up kubectl
-
-### Get the list of nodes
+Set Up kubectl
+Get the list of nodes
 
 ```
 kubectl get nodes
