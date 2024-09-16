@@ -1,3 +1,4 @@
+#This Terraform configuration file defines a set of virtual machines (VMs) to be created in a Proxmox virtual environment.
 resource "proxmox_virtual_environment_vm" "talos_cp_01" {
   name        = "talos-cp-01"
   description = "Managed by Terraform"

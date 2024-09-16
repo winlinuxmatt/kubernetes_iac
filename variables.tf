@@ -1,3 +1,4 @@
+# This file defines the variables used in the Terraform configuration.
 variable "cluster_name" {
   type    = string
   default = "kubernetes_cluster"

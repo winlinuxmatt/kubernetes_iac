@@ -1,3 +1,10 @@
+# This is how the whole setup is structured:
+# - **main.tf**: This file contains the main configuration for managing the Talos cluster on Proxmox, including provider definitions, resource configurations, and data blocks for retrieving machine configurations.
+# - **providers.tf**: This file defines the required providers for the Terraform configuration, specifying the source and version for each provider.
+# - **variables.tf**: This file defines the variables used in the Terraform configuration, allowing for customization of the cluster name, IP addresses, and other settings.
+# - **virtual_machines.tf**: This file defines the virtual machines to be created in the Proxmox virtual environment, specifying their configurations such as CPU, memory, disk, and network settings.
+# - **cluster.tf**: This file contains the configuration for the Talos cluster, including the creation of machine secrets, retrieval of machine configurations, application of configurations to control plane and worker nodes, bootstrapping the control plane, and retrieving the health status and kubeconfig for the cluster.
+
 # This resource creates a new Talos machine secrets resource. 
 resource "talos_machine_secrets" "machine_secrets" {}
 
