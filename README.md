@@ -104,3 +104,6 @@ waiting for coredns to report ready: OK
 waiting for all k8s nodes to report schedulable: ...
 waiting for all k8s nodes to report schedulable: OK
 ```
+
+Check the health of the node/nodes
+![](photos/talosctl_dashboard.png)
