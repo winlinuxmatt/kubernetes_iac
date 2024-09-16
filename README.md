@@ -43,6 +43,12 @@ Ensure the permissions for these files are set correctly to avoid any security i
 chmod 600 ~/.kube/config && chmod 600 ~/.talos/config
 ```
 
+Or you can do it all in one
+
+```
+terraform output -raw kubeconfig > ~/.kube/config && terraform output -raw talosconfig > ~/.talos/config && chmod 600 ~/.kube/config && chmod 600 ~/.talos/config
+```
+
 Set Up kubectl
 Get the list of nodes
 
@@ -55,4 +61,9 @@ talos-cp-03       Ready    control-plane   3h24m   v1.30.0
 talos-worker-01   Ready    <none>          3h39m   v1.30.0
 talos-worker-02   Ready    <none>          3h24m   v1.30.0
 talos-worker-03   Ready    <none>          3h24m   v1.30.0
+```
+Show the dashboard of one of the nodes via
+
+```
+talosctl dashboard -n talos-cp-01
 ```
