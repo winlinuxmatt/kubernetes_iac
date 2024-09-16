@@ -112,9 +112,35 @@ resource "talos_machine_configuration_apply" "worker_config_apply_03" {
 
 # This resource bootstraps the Talos control plane node.
 resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on           = [ talos_machine_configuration_apply.cp_config_apply ]
+  depends_on           = [
+    talos_machine_configuration_apply.cp_config_apply,
+    talos_machine_configuration_apply.cp_config_apply_02,
+    talos_machine_configuration_apply.cp_config_apply_03
+  ]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = var.talos_cp_01_ip_addr
+}
+
+# This resource bootstraps the Talos control plane node 02.
+resource "talos_machine_bootstrap" "bootstrap_02" {
+  depends_on           = [
+    talos_machine_configuration_apply.cp_config_apply,
+    talos_machine_configuration_apply.cp_config_apply_02,
+    talos_machine_configuration_apply.cp_config_apply_03
+  ]
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  node                 = var.talos_cp_02_ip_addr
+}
+
+# This resource bootstraps the Talos control plane node 03.
+resource "talos_machine_bootstrap" "bootstrap_03" {
+  depends_on           = [
+    talos_machine_configuration_apply.cp_config_apply,
+    talos_machine_configuration_apply.cp_config_apply_02,
+    talos_machine_configuration_apply.cp_config_apply_03
+  ]
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  node                 = var.talos_cp_03_ip_addr
 }
 
 # This data block retrieves the health status of the Talos cluster.
