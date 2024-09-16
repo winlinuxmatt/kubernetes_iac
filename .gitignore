@@ -18,6 +18,8 @@ terraform.rc
 terraform.tfstate*
 .terraform.lock*
 .terraform.tfstate.d/*
+.terraform/tfstate.lock.hcl
+.terraform.tfstate.lock.info
 
 # Ignore vscode
 **/.vscode/*
