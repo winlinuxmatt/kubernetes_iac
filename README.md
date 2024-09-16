@@ -1,7 +1,8 @@
 # kubernetes_iac
 Terraform Kubernetes IAC
 
-This repository was built following the instructions provided in the following article and altered to support my cluster setup. I plan to improve this over time, but this is the first iteration.
+This repository was constructed by following the instructions outlined in the enlightening article mentioned below. I have made certain modifications to adapt it to my specific cluster configuration. It is worth noting that the datasets or datastores on my proxmox might have different names compared to those in your proxmox setup. Therefore, it is essential to make the necessary adjustments according to your own setup. My proxmox cluster consists of three nodes and utilizes the ceph storage solution for efficient management of virtual machines across all nodes.
+
 
 Article: [Talos Cluster on Proxmox with Terraform](https://olav.ninja/talos-cluster-on-proxmox-with-terraform) by Olav
 
