@@ -156,12 +156,25 @@ data "talos_cluster_kubeconfig" "kubeconfig" {
 
 # Output the Talos configuration and kubeconfig.
 output "talosconfig" {
-  value = data.talos_client_configuration.talosconfig.talos_config
+  value     = data.talos_client_configuration.talosconfig.talos_config
   sensitive = true
 }
 
 # Output the kubeconfig for the Talos cluster.
 output "kubeconfig" {
-  value = data.talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
+  value     = data.talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   sensitive = true
 }
+
+# # Run custom script for further configuration.
+# resource "null_resource" "run_custom_script" {
+#   provisioner "local-exec" {
+#     command = "terraform output -raw kubeconfig > ~/.kube/config && terraform output -raw talosconfig > ~/.talos/config && chmod 600 ~/.kube/config && chmod 600 ~/.talos/config"
+#   }
+#   depends_on = [
+#     data.talos_cluster_kubeconfig.kubeconfig,
+#     data.talos_client_configuration.talosconfig
+#   ]
+# }
+
+
