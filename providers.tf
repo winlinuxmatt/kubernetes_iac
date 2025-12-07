@@ -11,9 +11,20 @@ terraform {
       source  = "siderolabs/talos"
       version = "0.7.1"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.12.1"
+    }
     null = {
       source  = "hashicorp/null"
       version = "~> 3.0"
     }
   }
 }
+
+provider "helm" {
+  kubernetes {
+    config_path = pathexpand("~/.kube/config")
+  }
+}
+
