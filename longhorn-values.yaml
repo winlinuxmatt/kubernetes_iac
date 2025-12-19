@@ -1,0 +1,32 @@
+# Longhorn values for Talos with raw /dev/vdb on workers
+defaultSettings:
+  # Disable default filesystem-based disk creation
+  createDefaultDisk: false
+
+  # Optional: set default replica count (can be overridden per volume)
+  defaultReplicaCount: 3
+
+  # Optional: enable auto-cleanup of unreferenced resources
+  autoDeletePodWhenPvDrainFailed: true
+
+# If you want Longhorn to auto-find /dev/vdb on all workers:
+# (You can also add disks manually in the UI after install)
+persistence:
+  # This tells Longhorn to discover and use /dev/vdb on each node
+  # if it exists and is not in use.
+  # You can also skip this and add disks manually in UI.
+  defaultFs: xfs
+  defaultClass: true
+
+# Optional: node selector to run Longhorn only on workers
+# nodeSelector:
+#   node-role.kubernetes.io/worker: "true"
+
+# Optional: tolerations for worker-only nodes
+tolerations:
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
+
+# Explicitly clear nodeSelector so Longhorn runs on all nodes
+nodeSelector: {}

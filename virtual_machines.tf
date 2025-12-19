@@ -13,7 +13,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_01" {
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 8192
   }
 
   agent {
@@ -29,7 +29,14 @@ resource "proxmox_virtual_environment_vm" "talos_cp_01" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 20
+    size         = 100
+  }
+
+  disk {
+    datastore_id = "pve-ceph-storage"
+    file_format  = "raw"
+    interface    = "virtio1"
+    size         = 200
   }
 
   operating_system {
@@ -63,7 +70,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_02" {
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 8192
   }
 
   agent {
@@ -79,7 +86,14 @@ resource "proxmox_virtual_environment_vm" "talos_cp_02" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 20
+    size         = 100
+  }
+
+  disk {
+    datastore_id = "pve-ceph-storage"
+    file_format  = "raw"
+    interface    = "virtio1"
+    size         = 200
   }
 
   operating_system {
@@ -113,7 +127,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_03" {
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 8192
   }
 
   agent {
@@ -129,7 +143,14 @@ resource "proxmox_virtual_environment_vm" "talos_cp_03" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 20
+    size         = 100
+  }
+
+  disk {
+    datastore_id = "pve-ceph-storage"
+    file_format  = "raw"
+    interface    = "virtio1"
+    size         = 200
   }
 
   operating_system {
@@ -164,7 +185,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 8192
   }
 
   agent {
@@ -180,7 +201,13 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 20
+    size         = 100
+  }
+  disk {
+    datastore_id = "pve-ceph-storage"
+    file_format  = "raw"
+    interface    = "virtio1"
+    size         = 200
   }
 
   operating_system {
@@ -215,7 +242,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 8192
   }
 
   agent {
@@ -231,7 +258,13 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 20
+    size         = 100
+  }
+  disk {
+    datastore_id = "pve-ceph-storage"
+    file_format  = "raw"
+    interface    = "virtio1"
+    size         = 200
   }
 
   operating_system {
@@ -266,7 +299,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_03" {
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 8192
   }
 
   agent {
@@ -282,7 +315,14 @@ resource "proxmox_virtual_environment_vm" "talos_worker_03" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 20
+    size         = 100
+  }
+
+  disk {
+    datastore_id = "pve-ceph-storage"
+    file_format  = "raw"
+    interface    = "virtio1"
+    size         = 200
   }
 
   operating_system {
