@@ -30,3 +30,14 @@ tolerations:
 
 # Explicitly clear nodeSelector so Longhorn runs on all nodes
 nodeSelector: {}
+
+# Expose Longhorn UI via NodePort for external access
+service:
+  ui:
+    type: NodePort
+    nodePort: 30080  # Choose a port in the NodePort range (30000-32767)
+
+# Optional: Enable access to Longhorn Manager API
+longhornManager:
+  service:
+    type: ClusterIP
