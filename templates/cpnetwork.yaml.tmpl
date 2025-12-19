@@ -3,6 +3,7 @@ machine:
     interfaces:
       - deviceSelector:
           busPath: "0*"
-        dhcp: true
+        addresses:
+          - ${cpip}/24
         vip:
           ip: ${cpip}
