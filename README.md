@@ -29,10 +29,12 @@ This repository provides Infrastructure as Code (IaC) for deploying and managing
 1. Edit the version variables in `variables.tf`:
     ```hcl
     variable "talos_version" {
-      default = "v1.9.5"
+      type    = string
+      default = "v1.11.5"
     }
     variable "kubernetes_version" {
-      default = "1.32.0"
+      type    = string
+      default = "1.34.0"
     }
     ```
 2. Run:
