@@ -52,8 +52,6 @@ This repository provides Infrastructure as Code (IaC) for deploying and managing
 ├── virtual_machines.tf           # Proxmox VM definitions for control plane and workers
 ├── longhorn-values.yaml          # Helm values for Longhorn persistent storage
 ├── LONGHORN_TALOS_SETUP.md       # Longhorn setup guide and troubleshooting
-├── templates/
-│   └── worker-disks.yaml.tmpl    # Worker disk configuration template
 ├── .github/workflows/terraform-lint.yml # CI workflow for linting
 └── README.md                     # Project documentation
 ```
