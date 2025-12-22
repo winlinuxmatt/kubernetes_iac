@@ -29,13 +29,6 @@ resource "proxmox_virtual_environment_vm" "talos_cp_01" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 100
-  }
-
-  disk {
-    datastore_id = "pve-ceph-storage"
-    file_format  = "raw"
-    interface    = "virtio1"
     size         = 200
   }
 
@@ -86,13 +79,6 @@ resource "proxmox_virtual_environment_vm" "talos_cp_02" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 100
-  }
-
-  disk {
-    datastore_id = "pve-ceph-storage"
-    file_format  = "raw"
-    interface    = "virtio1"
     size         = 200
   }
 
@@ -143,13 +129,6 @@ resource "proxmox_virtual_environment_vm" "talos_cp_03" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 100
-  }
-
-  disk {
-    datastore_id = "pve-ceph-storage"
-    file_format  = "raw"
-    interface    = "virtio1"
     size         = 200
   }
 
@@ -201,12 +180,6 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 100
-  }
-  disk {
-    datastore_id = "pve-ceph-storage"
-    file_format  = "raw"
-    interface    = "virtio1"
     size         = 200
   }
 
@@ -258,12 +231,6 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 100
-  }
-  disk {
-    datastore_id = "pve-ceph-storage"
-    file_format  = "raw"
-    interface    = "virtio1"
     size         = 200
   }
 
@@ -315,13 +282,6 @@ resource "proxmox_virtual_environment_vm" "talos_worker_03" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 100
-  }
-
-  disk {
-    datastore_id = "pve-ceph-storage"
-    file_format  = "raw"
-    interface    = "virtio1"
     size         = 200
   }
 

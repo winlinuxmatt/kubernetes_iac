@@ -1,4 +1,4 @@
-# Longhorn values for Talos with raw /dev/vdb on workers
+# Longhorn values for Talos with Cilium CNI
 defaultSettings:
   # Disable default filesystem-based disk creation
   createDefaultDisk: false
@@ -9,12 +9,26 @@ defaultSettings:
   # Optional: enable auto-cleanup of unreferenced resources
   autoDeletePodWhenPvDrainFailed: true
 
-# If you want Longhorn to auto-find /dev/vdb on all workers:
-# (You can also add disks manually in the UI after install)
+  # Cilium CNI specific settings
+  csi.kubeletRootDir: "/var/lib/kubelet"
+  
+  # Enable backup target (optional)
+  backupTarget: ""
+
+  # Network settings for Cilium
+  network:
+    # Use Cilium's network policies
+    allowNodeDrainSameNetworkZone: true
+
+  # Talos-specific settings
+  disableScheduling: false
+  allowRecurringJobWhileVolumeDetached: true
+
+# Persistence settings:
+# (You can add disks manually in the UI after install)
 persistence:
-  # This tells Longhorn to discover and use /dev/vdb on each node
-  # if it exists and is not in use.
-  # You can also skip this and add disks manually in UI.
+  # Configure default filesystem and storage class settings.
+  # You can add disks manually in UI.
   defaultFs: xfs
   defaultClass: true
 

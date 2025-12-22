@@ -58,5 +58,5 @@ variable "talos_version" {
 
 variable "kubernetes_version" {
   type    = string
-  default = "1.32.0"
+  default = "1.34.0"
 }
