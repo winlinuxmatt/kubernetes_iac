@@ -85,9 +85,6 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker.machine_configuration
   node                        = var.talos_worker_01_ip_addr
-  config_patches = [
-    templatefile("./templates/worker-disks.yaml.tmpl", {})
-  ]
 }
 
 resource "talos_machine_configuration_apply" "worker_config_apply_02" {
@@ -95,9 +92,6 @@ resource "talos_machine_configuration_apply" "worker_config_apply_02" {
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker_02.machine_configuration
   node                        = var.talos_worker_02_ip_addr
-  config_patches = [
-    templatefile("./templates/worker-disks.yaml.tmpl", {})
-  ]
 }
 
 resource "talos_machine_configuration_apply" "worker_config_apply_03" {
@@ -105,9 +99,6 @@ resource "talos_machine_configuration_apply" "worker_config_apply_03" {
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker_03.machine_configuration
   node                        = var.talos_worker_03_ip_addr
-  config_patches = [
-    templatefile("./templates/worker-disks.yaml.tmpl", {})
-  ]
 }
 
 # Bootstrap Control Plane (commented out - cluster already bootstrapped)
