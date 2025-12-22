@@ -17,8 +17,10 @@ This repository provides Infrastructure as Code (IaC) for deploying and managing
 ### Key Features
 
 - **Declarative VM Provisioning:** Proxmox VMs for control plane and worker nodes are managed via Terraform.
+- **Custom Talos Image:** Uses Talos Image Factory with baked-in system extensions (iSCSI tools, util-linux tools) for persistent storage support.
 - **Talos OS & Kubernetes Versioning:** Talos and Kubernetes versions are parameterized in `variables.tf` for easy upgrades.
 - **Automated Cluster Configuration:** Talos machine configurations are generated and applied automatically to each node.
+- **Longhorn Persistent Storage:** Distributed block storage with NodePort UI access (port 30080) for volume management.
 - **Rolling Upgrades:** Change a version variable and apply to safely upgrade Talos and/or Kubernetes across your cluster.
 - **CI/CD Linting:** A GitHub Actions workflow automatically checks Terraform formatting and lints code on pull requests and pushes to `main`.
 
@@ -43,13 +45,18 @@ This repository provides Infrastructure as Code (IaC) for deploying and managing
 
 ```
 .
-├── cluster.tf         # Talos cluster and machine configuration resources
-├── files.tf           # Talos image download and local variables
-├── providers.tf       # Terraform provider configuration
-├── variables.tf       # All input variables, including versioning
-├── virtual_machines.tf# Proxmox VM definitions for control plane and workers
+├── cluster.tf                    # Talos cluster and machine configuration resources
+├── files.tf                      # Talos custom image download with system extensions
+├── providers.tf                  # Terraform provider configuration
+├── variables.tf                  # All input variables, including versioning
+├── virtual_machines.tf           # Proxmox VM definitions for control plane and workers
+├── longhorn-values.yaml          # Helm values for Longhorn persistent storage
+├── LONGHORN_TALOS_SETUP.md       # Longhorn setup guide and troubleshooting
+├── templates/
+│   ├── worker-disks.yaml.tmpl    # Worker disk configuration template
+│   └── cpnetwork.yaml.tmpl       # Control plane network template (unused)
 ├── .github/workflows/terraform-lint.yml # CI workflow for linting
-└── README.md          # Project documentation
+└── README.md                     # Project documentation
 ```
 
 ### Automation
@@ -59,6 +66,98 @@ This repository provides Infrastructure as Code (IaC) for deploying and managing
     - `terraform fmt -check -recursive`
     - `tflint --recursive`
   to ensure code quality and consistency.
+
+---
+
+## Talos System Extensions
+
+This cluster uses a custom Talos image built via the [Talos Image Factory](https://factory.talos.dev/) with the following system extensions baked in:
+
+- **iscsi-tools** (v0.2.0): Provides iSCSI initiator support for persistent storage
+- **util-linux-tools** (2.41.1): Additional Linux utilities for storage management
+- **qemu-guest-agent** (10.0.2): Enhanced VM integration with Proxmox
+
+**Schematic ID**: `e187c9b90f773cd8c84e5a3265c5554ee787b2fe67b508d9f955e90e7ae8c96c`
+
+These extensions enable Longhorn to properly manage persistent volumes on Talos nodes. The `ext-iscsid` service runs automatically on all nodes.
+
+### Verify System Extensions
+
+Check that extensions are installed on all nodes:
+```bash
+talosctl get extensions --nodes 10.0.0.70,10.0.0.71,10.0.0.72,10.0.0.73,10.0.0.74,10.0.0.75
+```
+
+Verify iSCSI service is running:
+```bash
+talosctl get services --nodes 10.0.0.73,10.0.0.74,10.0.0.75 | grep ext-iscsid
+```
+
+---
+
+## Persistent Storage with Longhorn
+
+This cluster includes [Longhorn](https://longhorn.io/) for distributed block storage across worker nodes.
+
+### Longhorn Features
+
+- **Distributed Storage**: Replicated volumes across multiple nodes for high availability
+- **Dynamic Provisioning**: Automatic PersistentVolume creation via StorageClasses
+- **Web UI**: Accessible via NodePort on port 30080 (http://NODE_IP:30080)
+- **Backup & Restore**: Volume snapshots and backup capabilities
+- **Pod Security**: Configured with privileged permissions in `longhorn-system` namespace
+
+### Install Longhorn
+
+Longhorn is deployed using Helm with custom values:
+
+```bash
+helm repo add longhorn https://charts.longhorn.io
+helm repo update
+helm install longhorn longhorn/longhorn \
+  --namespace longhorn-system \
+  --create-namespace \
+  --values longhorn-values.yaml
+```
+
+### Configure Pod Security for Longhorn
+
+Longhorn requires privileged pod security. Apply labels to the namespace:
+
+```bash
+kubectl label namespace longhorn-system \
+  pod-security.kubernetes.io/enforce=privileged \
+  pod-security.kubernetes.io/audit=privileged \
+  pod-security.kubernetes.io/warn=privileged
+```
+
+### Verify Longhorn Installation
+
+Check that all Longhorn pods are running:
+```bash
+kubectl get pods -n longhorn-system
+```
+
+Verify storage classes are created:
+```bash
+kubectl get storageclass
+```
+
+Expected output:
+```
+NAME                 PROVISIONER          RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+longhorn (default)   driver.longhorn.io   Delete          Immediate           true                   5m
+longhorn-static      driver.longhorn.io   Delete          Immediate           true                   5m
+```
+
+### Access Longhorn UI
+
+Access the Longhorn web interface at:
+```
+http://<any-node-ip>:30080
+```
+
+For detailed setup instructions, troubleshooting, and disk management, see [LONGHORN_TALOS_SETUP.md](LONGHORN_TALOS_SETUP.md).
 
 ---
 
@@ -117,6 +216,19 @@ talos-worker-03   Ready    <none>          90s   v1.32.0
   waiting for all k8s nodes to report ready: OK
   waiting for all control plane components to be ready: OK
   ...
+  ```
+
+- **Verify System Extensions**:
+  ```bash
+  talosctl get extensions --nodes 10.0.0.70
+  ```
+  Sample output:
+  ```
+  NODE        NAMESPACE   TYPE              ID   VERSION   NAME               VERSION
+  10.0.0.70   runtime     ExtensionStatus   0    1         iscsi-tools        v0.2.0
+  10.0.0.70   runtime     ExtensionStatus   1    1         util-linux-tools   2.41.1
+  10.0.0.70   runtime     ExtensionStatus   2    1         qemu-guest-agent   10.0.2
+  10.0.0.70   runtime     ExtensionStatus   3    1         schematic          e187c9b90f773cd8c84e5a3265c5554ee787b2fe67b508d9f955e90e7ae8c96c
   ```
 
 - **Health Dashboard Example**:
