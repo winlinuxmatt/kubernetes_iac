@@ -7,32 +7,75 @@ resource "talos_machine_secrets" "machine_secrets" {}
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = [var.talos_cp_01_ip_addr]
+  endpoints            = [var.cluster_vip, var.talos_cp_01_ip_addr, var.talos_cp_02_ip_addr, var.talos_cp_03_ip_addr]
 }
 
 # Control Plane Machine Configurations
+# All control planes use the VIP as the cluster endpoint for HA
 data "talos_machine_configuration" "machineconfig_cp" {
   cluster_name       = var.cluster_name
-  cluster_endpoint   = "https://${var.talos_cp_01_ip_addr}:6443"
+  cluster_endpoint   = "https://${var.cluster_vip}:6443"
   machine_type       = "controlplane"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
   kubernetes_version = var.kubernetes_version
+  config_patches = [
+    yamlencode({
+      machine = {
+        network = {
+          interfaces = [{
+            interface = "eth0"
+            vip = {
+              ip = var.cluster_vip
+            }
+          }]
+        }
+      }
+    })
+  ]
 }
 
 data "talos_machine_configuration" "machineconfig_cp_02" {
   cluster_name       = var.cluster_name
-  cluster_endpoint   = "https://${var.talos_cp_02_ip_addr}:6443"
+  cluster_endpoint   = "https://${var.cluster_vip}:6443"
   machine_type       = "controlplane"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
   kubernetes_version = var.kubernetes_version
+  config_patches = [
+    yamlencode({
+      machine = {
+        network = {
+          interfaces = [{
+            interface = "eth0"
+            vip = {
+              ip = var.cluster_vip
+            }
+          }]
+        }
+      }
+    })
+  ]
 }
 
 data "talos_machine_configuration" "machineconfig_cp_03" {
   cluster_name       = var.cluster_name
-  cluster_endpoint   = "https://${var.talos_cp_03_ip_addr}:6443"
+  cluster_endpoint   = "https://${var.cluster_vip}:6443"
   machine_type       = "controlplane"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
   kubernetes_version = var.kubernetes_version
+  config_patches = [
+    yamlencode({
+      machine = {
+        network = {
+          interfaces = [{
+            interface = "eth0"
+            vip = {
+              ip = var.cluster_vip
+            }
+          }]
+        }
+      }
+    })
+  ]
 }
 
 # Apply Control Plane Configurations
@@ -58,25 +101,29 @@ resource "talos_machine_configuration_apply" "cp_config_apply_03" {
 }
 
 # Worker Machine Configurations
+# All workers use the VIP as the cluster endpoint for HA
 data "talos_machine_configuration" "machineconfig_worker" {
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.talos_cp_01_ip_addr}:6443"
-  machine_type     = "worker"
-  machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+  cluster_name       = var.cluster_name
+  cluster_endpoint   = "https://${var.cluster_vip}:6443"
+  machine_type       = "worker"
+  machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
+  kubernetes_version = var.kubernetes_version
 }
 
 data "talos_machine_configuration" "machineconfig_worker_02" {
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.talos_cp_02_ip_addr}:6443"
-  machine_type     = "worker"
-  machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+  cluster_name       = var.cluster_name
+  cluster_endpoint   = "https://${var.cluster_vip}:6443"
+  machine_type       = "worker"
+  machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
+  kubernetes_version = var.kubernetes_version
 }
 
 data "talos_machine_configuration" "machineconfig_worker_03" {
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.talos_cp_03_ip_addr}:6443"
-  machine_type     = "worker"
-  machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+  cluster_name       = var.cluster_name
+  cluster_endpoint   = "https://${var.cluster_vip}:6443"
+  machine_type       = "worker"
+  machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
+  kubernetes_version = var.kubernetes_version
 }
 
 # Apply Worker Configurations
