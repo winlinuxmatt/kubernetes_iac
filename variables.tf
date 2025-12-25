@@ -53,5 +53,11 @@ variable "talos_version" {
 
 variable "kubernetes_version" {
   type    = string
-  default = "1.34.0"
+  default = "1.32.0"
+}
+
+variable "cluster_vip" {
+  type        = string
+  default     = "10.0.0.69"
+  description = "Virtual IP for the Kubernetes API server (HA endpoint)"
 }
