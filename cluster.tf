@@ -102,12 +102,29 @@ resource "talos_machine_configuration_apply" "cp_config_apply_03" {
 
 # Worker Machine Configurations
 # All workers use the VIP as the cluster endpoint for HA
+# Includes Longhorn requirements: kubelet extra mounts for MountPropagation
 data "talos_machine_configuration" "machineconfig_worker" {
   cluster_name       = var.cluster_name
   cluster_endpoint   = "https://${var.cluster_vip}:6443"
   machine_type       = "worker"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
   kubernetes_version = var.kubernetes_version
+  config_patches = [
+    yamlencode({
+      machine = {
+        kubelet = {
+          extraMounts = [
+            {
+              destination = "/var/lib/longhorn"
+              type        = "bind"
+              source      = "/var/lib/longhorn"
+              options     = ["bind", "rshared", "rw"]
+            }
+          ]
+        }
+      }
+    })
+  ]
 }
 
 data "talos_machine_configuration" "machineconfig_worker_02" {
@@ -116,6 +133,22 @@ data "talos_machine_configuration" "machineconfig_worker_02" {
   machine_type       = "worker"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
   kubernetes_version = var.kubernetes_version
+  config_patches = [
+    yamlencode({
+      machine = {
+        kubelet = {
+          extraMounts = [
+            {
+              destination = "/var/lib/longhorn"
+              type        = "bind"
+              source      = "/var/lib/longhorn"
+              options     = ["bind", "rshared", "rw"]
+            }
+          ]
+        }
+      }
+    })
+  ]
 }
 
 data "talos_machine_configuration" "machineconfig_worker_03" {
@@ -124,6 +157,22 @@ data "talos_machine_configuration" "machineconfig_worker_03" {
   machine_type       = "worker"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
   kubernetes_version = var.kubernetes_version
+  config_patches = [
+    yamlencode({
+      machine = {
+        kubelet = {
+          extraMounts = [
+            {
+              destination = "/var/lib/longhorn"
+              type        = "bind"
+              source      = "/var/lib/longhorn"
+              options     = ["bind", "rshared", "rw"]
+            }
+          ]
+        }
+      }
+    })
+  ]
 }
 
 # Apply Worker Configurations
